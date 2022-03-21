@@ -9,7 +9,7 @@ const App = () => {
       <DefaultTemplate>
         <Routes>
           <Route path="/" element={<PostsPage />}></Route>
-          <Route path="/post/:postId" element={<PostPage />}></Route>
+          <Route path="/posts/:postId" element={<PostPage />}></Route>
           <Route path="*" element={<NotFoundPage />}></Route>
         </Routes>
       </DefaultTemplate>

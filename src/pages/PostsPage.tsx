@@ -1,13 +1,15 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import PostList from "../components/PostList";
-import { fetchAllPost } from "../redux/posts";
+import { posts } from "../redux/posts/slice";
 
 const PostsPage = () => {
   const dispatch = useDispatch();
+  const { loading } = posts.actions;
 
   useEffect(() => {
-    dispatch(fetchAllPost());
+    console.log("dispatch");
+    dispatch(loading());
   }, [dispatch]);
 
   return (

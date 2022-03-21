@@ -13,8 +13,8 @@ const PostList = () => {
         <Spinner loading={loading}></Spinner>
       ) : (
         <ul>
-          {data.map((post) => (
-            <PostItem post={post} key={post.id}></PostItem>
+          {data.map((post, index) => (
+            <PostItem post={post} key={`${post.id}-${index}`}></PostItem>
           ))}
         </ul>
       )}

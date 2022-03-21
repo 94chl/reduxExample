@@ -8,9 +8,6 @@ const Menu = () => {
         <li>
           <Link to="/">HOME</Link>
         </li>
-        <li>
-          <Link to="/posts">POSTS</Link>
-        </li>
       </ul>
     </nav>
   );
