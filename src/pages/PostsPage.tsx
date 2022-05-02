@@ -3,13 +3,12 @@ import { useDispatch } from "react-redux";
 import PostList from "../components/PostList";
 import { posts } from "../redux/posts/slice";
 
-const PostsPage = () => {
+const PostsPage = ({ match }: any) => {
   const dispatch = useDispatch();
-  const { loading } = posts.actions;
-
+  const { requestAllPosts } = posts.actions;
+  console.log(match);
   useEffect(() => {
-    console.log("dispatch");
-    dispatch(loading());
+    dispatch(requestAllPosts());
   }, [dispatch]);
 
   return (

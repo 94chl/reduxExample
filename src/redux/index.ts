@@ -2,12 +2,12 @@ import { configureStore } from "@reduxjs/toolkit";
 import { posts } from "./posts/slice";
 import createSagaMiddleware from "@redux-saga/core";
 import { all } from "redux-saga/effects";
-import { watchPosts, watchPost } from "./posts/saga";
+import { watchPosts, watchAction, watchTest } from "./posts/saga";
 
 const sagaMiddleWare = createSagaMiddleware();
 
 function* rootSaga() {
-  yield all([watchPosts(), watchPost()]);
+  yield all([watchPosts(), watchAction(), watchTest()]);
 }
 
 export const store = configureStore({

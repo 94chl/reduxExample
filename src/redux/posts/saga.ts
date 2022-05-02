@@ -1,4 +1,13 @@
-import { call, put, takeLatest } from "redux-saga/effects";
+import {
+  call,
+  put,
+  takeEvery,
+  takeLatest,
+  take,
+  select,
+  delay,
+  getContext,
+} from "redux-saga/effects";
 import { fetchAllPosts, fetchPostById } from "../../api/posts";
 import { posts } from "./slice";
 
@@ -9,14 +18,21 @@ interface Post {
   body: string;
 }
 
+interface ResponseGenerator {
+  data?: any;
+}
+
 const {
-  loading,
+  requestAllPosts,
   getAllPosts,
   requestPostById,
   getPostById,
   error,
+  HELLO_SAGA,
+  TEST_SAGA,
+  NAVI_SAGA,
 } = posts.actions;
-
+console.log(posts);
 function* fetchAllPostsSaga() {
   console.log("SAGA POSTS");
   try {
@@ -39,10 +55,43 @@ function* fetchPostByIdSaga(action: any) {
 
 export function* watchPosts() {
   console.log("WATCH POSTS");
-  yield takeLatest(loading, fetchAllPostsSaga);
+  yield takeLatest(requestAllPosts, fetchAllPostsSaga);
+  yield takeLatest(requestPostById, fetchPostByIdSaga);
+  yield takeLatest(NAVI_SAGA, function* test(action) {
+    const { navigate, dest } = action.payload;
+    navigate(dest);
+  });
 }
 
-export function* watchPost() {
-  console.log("WATCH POST");
-  yield takeLatest(requestPostById, fetchPostByIdSaga);
+export function* watchAction() {
+  yield takeEvery("*", function* logger(action) {
+    const state: ResponseGenerator = yield select();
+
+    console.log("Action", action);
+    console.log("State", state);
+  });
+}
+
+function* makeMessage(content: string) {
+  yield delay(1000);
+  return `${content} Message`;
+}
+
+function deleteMessage() {
+  return "Message is Deleted!";
+}
+
+function makeLog(content: string) {
+  console.log("makeLog", content);
+}
+
+export function* watchTest() {
+  while (true) {
+    yield take(HELLO_SAGA);
+    let message: string = yield call(makeMessage, "HELLO");
+    yield call(makeLog, message);
+    yield take(TEST_SAGA);
+    message = yield call(deleteMessage);
+    yield call(makeLog, message);
+  }
 }

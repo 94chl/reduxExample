@@ -18,7 +18,7 @@ const PostPage = () => {
   useEffect(() => {
     if (postId) dispatch(requestPostById(postId));
   }, [dispatch, postId]);
-  console.log(post);
+
   return (
     <div>
       {post ? (

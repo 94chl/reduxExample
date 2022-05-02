@@ -21,15 +21,15 @@ export interface PostsState {
 //   return data;
 // });
 
-export const fetchPostById = createAsyncThunk(
-  "posts/fetchPostById",
-  async (id: number) => {
-    const { data } = await axios.get(
-      `https://jsonplaceholder.typicode.com/posts/${id}`
-    );
-    return data;
-  }
-);
+// export const fetchPostById = createAsyncThunk(
+//   "posts/fetchPostById",
+//   async (id: number) => {
+//     const { data } = await axios.get(
+//       `https://jsonplaceholder.typicode.com/posts/${id}`
+//     );
+//     return data;
+//   }
+// );
 
 export const deletePostById = createAsyncThunk(
   `posts/deletePostById`,
@@ -46,18 +46,20 @@ export const posts = createSlice({
     loading: false,
   } as PostsState,
   reducers: {
-    loading(state: PostsState) {
-      console.log("loading", state.loading);
+    requestAllPosts(state: PostsState) {
       state.loading = true;
+      console.log("requestAllPosts loading", state.loading);
     },
     getAllPosts(state: PostsState, { payload: posts }) {
       console.log("getAllPosts", posts);
       state.data.push(...posts);
       state.loading = false;
+      console.log("getAllPosts loading", state.loading);
     },
     requestPostById(state: PostsState, { payload: postId }) {
       console.log("requestPostById", postId);
       state.loading = true;
+      console.log("requestPostById loading", state.loading);
     },
     getPostById(state: PostsState, { payload: postInfo }) {
       const index = state.data.findIndex((post) => post.id === postInfo.id);
@@ -68,10 +70,20 @@ export const posts = createSlice({
         state.data[index] = postInfo;
       }
       state.loading = false;
+      console.log("getPostById loading", state.loading);
     },
     error(state: PostsState, { payload: error }) {
-      console.log("ERROR", error);
+      console.error("ERROR", error);
       state.loading = false;
+    },
+    HELLO_SAGA(state: PostsState) {
+      console.log("HELLO SAGA!!");
+    },
+    TEST_SAGA(state: PostsState) {
+      console.log("TEST SAGA!!");
+    },
+    NAVI_SAGA(state: PostsState, { payload: { navigate, dest } }) {
+      console.log("NAVI SAGA!!");
     },
   },
   extraReducers: {
@@ -88,20 +100,20 @@ export const posts = createSlice({
     //   state.data.push(...action.payload);
     //   state.loading = false;
     // },
-    [fetchPostById.fulfilled.type]: (
-      state: PostsState,
-      action: PayloadAction<Post>
-    ) => {
-      const index = state.data.findIndex(
-        (post) => post.id === action.payload.id
-      );
-      console.log("FETCH POST BY ID");
-      if (index === -1) {
-        state.data.push(action.payload);
-      } else {
-        state.data[index] = action.payload;
-      }
-    },
+    // [fetchPostById.fulfilled.type]: (
+    //   state: PostsState,
+    //   action: PayloadAction<Post>
+    // ) => {
+    //   const index = state.data.findIndex(
+    //     (post) => post.id === action.payload.id
+    //   );
+    //   console.log("FETCH POST BY ID");
+    //   if (index === -1) {
+    //     state.data.push(action.payload);
+    //   } else {
+    //     state.data[index] = action.payload;
+    //   }
+    // },
     [deletePostById.fulfilled.type]: (
       state: PostsState,
       action: PayloadAction<Pick<Post, "id">>
